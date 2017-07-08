@@ -1,6 +1,6 @@
 (function (window, $) {
 	
-<<<<<<< HEAD
+
 	function User(name){
 		this.name = name;
 		this.money = 1000;
@@ -38,9 +38,6 @@
 			console.log("published");
 		}
 	}
-=======
-	
->>>>>>> 1b9062af09370f630f3ba2e727b840399fc7f9a1
 	
 	$(document).ready(function(){
 	
