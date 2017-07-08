@@ -1,1 +1,30 @@
 todos
+
+scheme
+
+Company: (contains all info that will be saved/loaded)
+	- name
+	- assets
+	- workers
+	- released games
+	- newGame() (start developing a new game)
+	- newEngine() (starts creating a new engine)
+	- researchTech()
+	- buyAssets()
+	
+Game: (the game objects)
+	- name
+	- genre
+	- cost
+	- engine used
+	- additional tech
+	- release() (releases the game)
+	
+Worker:
+	- name
+	- specialization
+	- skill
+	- salary
+	- hire()
+	- fire()
+	- levelUp()
