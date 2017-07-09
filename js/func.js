@@ -74,7 +74,7 @@ function User(fname, lname){
 	this.lname = lname;
 	this.name = fname + " " + lname;
 	
-	this.avatar = "php/face.php";
+	this.avatar = {};
 
 	this.money = 1000;
 	this.companies = [];
@@ -100,6 +100,7 @@ function Company(name, capital){
 	this.workers = [];
 	this.currentProjects = [];
 	this.releasedGames = [];
+	this.archive = [];
 }
 
 Company.prototype = {
@@ -131,6 +132,13 @@ Company.prototype = {
 		});
 		return exit;
 	},
+	makeSales: function(){
+		this.releasedGames.forEach(function(current, index, arr){
+			this.capital += (current.popularity * current.price);
+			current.soldCopies += current.popularity;
+			current.popularity -= 5;
+		});
+	},
 	hire: function(worker){
 		this.workers.push(worker);
 		worker.company = this;
@@ -146,7 +154,12 @@ Company.prototype = {
 
 function Game(name){
 	this.name = name;
-	this.sellingPrice = 10;
+	
+	this.price = 10;
+	this.soldCopies = 0;
+	this.sellingTimeLeft = 100;
+	this.popularity = 50;
+	
 	this.baseDuration = 10;
 	this.neededJobs = [
 		{
@@ -227,7 +240,7 @@ Job.prototype = {
 //globals
 
 var user = new User("Kry", "Eger");
-var VERSION = 0.0;
+var VERSION = "0.0";
 
 //jquery
 
