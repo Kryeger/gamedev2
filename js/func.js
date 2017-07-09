@@ -1,7 +1,12 @@
 (function (window, $) {
 	
-
+	var user = new User("Kry", "Eger");
+	
 	//methods
+	
+	function hey(diff = ""){
+		console.log("hey" + diff);
+	}
 	
 	function inheritPrototype(childObject, parentObject){
 		var copyOfParent = Object.create(parentObject.prototype);
@@ -48,11 +53,12 @@
 		},
 		checkForJobs: function(){
 			if(this.currentJob == "")
-				this.company.jobsQueue.forEach(function(current, index, arr){
+				this.company.jobsQueue.some(function(current, index, arr){
 					//if it meets requirements
 					this.currentJob = current;
-					arr.splice(index, 1);
-				});
+					current.contrib.push(this);
+					return 1;
+				}, this);
 		}
 	}
 	
@@ -103,9 +109,9 @@
 			});
 		},
 		workJobs: function(){
-			this.workers.forEach(function(_current, _index, _arr){
-				if(_current.currentJob != ""){
-					_current.currentJob.progress(chance.integer({min: 1, max: 2}));
+			this.workers.forEach(function(current, index, arr){
+				if(current.currentJob != ""){
+					current.currentJob.makeProgress(chance.integer({min: 1, max: 3}));
 				}
 			});
 		},
@@ -130,15 +136,21 @@
 			{
 				type: "Code",
 				amount: 1,
-				reward: 10
+				reward: 10,
+				duration: this.baseDuration,
+				progress: 0
 			}, {
 			    type: "Art",
 				amount: 1,
-				reward: 10
+				reward: 10,
+				duration: this.baseDuration,
+				progress: 0
 			}, {
 			    type: "Sound",
 				amount: 1,
-				reward: 10
+				reward: 10,
+				duration: this.baseDuration,
+				progress: 0
 			}
 		];
 		this.parentCompany = "none";
@@ -150,11 +162,14 @@
 		generateJobs: function(){
 			this.neededJobs.forEach(function(current, index, arr){
 				while(current.amount){
-					console.log(new Job("name", current.type, this.baseDuration, current.reward));
-					this.parentCompany.jobsQueue.push(new Job("name", current.type, this.baseDuration, current.reward));
-					console.log(this.parentCompany.jobsQueue);
+					this.parentCompany.jobsQueue.push(new Job("jobname", current.type, current.baseDuration, current.reward));
 					current.amount --;
 				}
+			}, this);
+		},
+		calcProgress:function(){
+			this.neededJobs.forEach(function(current, index, arr){
+				
 			}, this);
 		},
 		publish:function(){
@@ -173,36 +188,39 @@
 	
 	Job.prototype = {
 		constructor: Job,
-		progress: function(amount){
+		makeProgress: function(amount){
 			this.progress += amount;
 			if(this.progress >= this.duration){
 				this.contrib.forEach(function(current, index, arr){
 					current.currentJob = "";
 					current.addExp(this.reward);
 					current.previousProjects.push(this);
-				});
+				}, this);
 			}
 		}
 	}
 	
 	$(document).ready(function(){
 		
-		var user = new User("Kry", "Eger");
 		user.createCompany();
 		user.mainCompany.developNewGame("game1");
 		user.mainCompany.hire(new Worker("coder", 1, 1, 1));
-		user.mainCompany.distribJobs();
-		console.log(user.mainCompany.workers);
 		
-		var worldTick = setInterval(function(){
-			
+		
+		$(document).on("click", ".ls-mi-icon", function(){
 			user.mainCompany.distribJobs();
-			
-			user.companies.forEach(function(current, index, arr){
-				current.workJobs();
-			});
-			
-		}, 250);
+			user.mainCompany.workJobs();
+			console.log(user.mainCompany);
+		});
+//		var worldTick = setInterval(function(){
+//			
+//			user.mainCompany.distribJobs();
+//			
+//			user.companies.forEach(function(current, index, arr){
+//				current.workJobs();
+//			});
+//			
+//		}, 250);
 		
 	});
 
