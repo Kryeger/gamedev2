@@ -4,6 +4,10 @@ function hey(diff = ""){
 	console.log("hey" + diff);
 }
 
+function percent(num1, num2){
+	return (num1 / num2) * 100;
+}
+
 function inheritPrototype(childObject, parentObject){
 	var copyOfParent = Object.create(parentObject.prototype);
 	copyOfParent.constructor = childObject;
@@ -64,6 +68,8 @@ function User(fname, lname){
 	this.fname = fname;
 	this.lname = lname;
 	this.name = fname + " " + lname;
+	
+	this.avatar = "php/face.php";
 
 	this.money = 1000;
 	this.companies = [];
@@ -149,6 +155,8 @@ function Game(name){
 			progress: 0
 		}
 	];
+	this.jobs = [];
+	this.progress = 0;
 	this.parentCompany = "none";
 
 }
@@ -158,15 +166,17 @@ Game.prototype = {
 	generateJobs: function(){
 		this.neededJobs.forEach(function(current, index, arr){
 			while(current.amount){
-				this.parentCompany.jobsQueue.push(new Job("jobname", current.type, current.baseDuration, current.reward));
+				this.jobs.push(new Job("jobname", current.type, current.baseDuration, current.reward));
 				current.amount --;
 			}
 		}, this);
 	},
 	calcProgress:function(){
-		this.neededJobs.forEach(function(current, index, arr){
-
+		this.progress = 0;
+		this.jobs.forEach(function(current, index, arr){
+			this.progress += percent(current.progress, current.duration);
 		}, this);
+		if(this.progress >= 100) this.publish;
 	},
 	publish:function(){
 		console.log("published");
@@ -203,7 +213,6 @@ var user = new User("Kry", "Eger");
 //jquery
 
 (function (window, $) {
-	
 	$(document).ready(function(){
 		
 		user.createCompany();
