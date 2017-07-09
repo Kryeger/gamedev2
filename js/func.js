@@ -51,14 +51,19 @@ Worker.prototype = {
 		this.level ++;
 		this.toNextLevel *= 1.3;
 	},
-	checkForJobs: function(){
-		if(this.currentJob == "")
-			this.company.jobsQueue.some(function(current, index, arr){
-				//if it meets requirements
-				this.currentJob = current;
-				current.contrib.push(this);
-				return 1;
+	getJob: function(){
+		this.company.currentProjects.some(function(current, index, arr){
+			var exit = 0;
+			current.jobs.some(function(_current, _index, _arr){
+				if(!_current.finished){
+					this.currentJob = _current;
+					_current.contrib.push(this);
+					exit = 1;
+					return exit;
+				}
 			}, this);
+			return exit;
+		}, this);
 	}
 }
 
@@ -94,7 +99,6 @@ function Company(name, capital){
 	this.capital = capital;
 	this.workers = [];
 	this.currentProjects = [];
-	this.jobsQueue = [];
 	this.releasedGames = [];
 }
 
@@ -107,7 +111,9 @@ Company.prototype = {
 	},
 	distribJobs: function(){
 		this.workers.forEach(function(current, index, arr){
-			current.checkForJobs();
+			if(current.currentJob == ""){
+				current.getJob();
+			}
 		});
 	},
 	workJobs: function(){
@@ -116,6 +122,14 @@ Company.prototype = {
 				current.currentJob.makeProgress(chance.integer({min: 1, max: 3}));
 			}
 		});
+	},
+	isAnyoneIdle: function(){
+		var exit = 0;
+		this.workers.some(function(current, index, arr){
+			if(current.currentJob == "") exit = 1;
+			return exit;
+		});
+		return exit;
 	},
 	hire: function(worker){
 		this.workers.push(worker);
@@ -166,7 +180,7 @@ Game.prototype = {
 	generateJobs: function(){
 		this.neededJobs.forEach(function(current, index, arr){
 			while(current.amount){
-				this.jobs.push(new Job("jobname", current.type, current.baseDuration, current.reward));
+				this.jobs.push(new Job("jobname", current.type, current.duration, current.reward));
 				current.amount --;
 			}
 		}, this);
@@ -180,6 +194,7 @@ Game.prototype = {
 	},
 	publish:function(){
 		console.log("published");
+		this.parentCompany.releasedGames.push(this);
 	}
 }
 
@@ -190,6 +205,7 @@ function Job(name, type, duration, reward){
 	this.progress = 0;
 	this.contrib = [];
 	this.reward = reward;
+	this.finished = 0;
 }
 
 Job.prototype = {
@@ -197,11 +213,13 @@ Job.prototype = {
 	makeProgress: function(amount){
 		this.progress += amount;
 		if(this.progress >= this.duration){
+			this.progress = this.duration;
 			this.contrib.forEach(function(current, index, arr){
 				current.currentJob = "";
 				current.addExp(this.reward);
 				current.previousProjects.push(this);
 			}, this);
+			this.finished = 1;
 		}
 	}
 }
@@ -209,6 +227,7 @@ Job.prototype = {
 //globals
 
 var user = new User("Kry", "Eger");
+var VERSION = 0.0;
 
 //jquery
 
@@ -221,7 +240,7 @@ var user = new User("Kry", "Eger");
 		
 		
 		$(document).on("click", ".ls-mi-icon", function(){
-			user.mainCompany.distribJobs();
+			if(user.mainCompany.isAnyoneIdle()) user.mainCompany.distribJobs();
 			user.mainCompany.workJobs();
 			console.log(user.mainCompany);
 		});
