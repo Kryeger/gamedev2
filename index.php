@@ -33,7 +33,12 @@ include_once("php/func.php");
     <body>
         
         <div class="topLevel">
+            <div class="top-leftside">
                 <div class="topLogo">gamedev</div>
+            </div>
+            <div class="top-rightside">
+                <div class="trs-avt" style="background-image: url(php/face.php?s=4);"></div>
+            </div>
         </div>
         
         <div class="bodyWrap">       

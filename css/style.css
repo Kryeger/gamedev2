@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #0a0a0a;
+    background-color: #111111;
     font-family: 'Roboto', sans-serif;
     color: #f9f9f9;
     display: flex;
@@ -83,6 +83,8 @@ body {
     padding: 10px;
     box-sizing: border-box;
     border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
 }
 
 .ls-top {
@@ -171,4 +173,18 @@ body {
     opacity: 1;
     right: -155px;
     transition: all 0.2s;
+}
+
+.trs-avt {
+    width: 40px;
+    height: 40px;
+    background-color: aliceblue;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 0 1px #1a1a1a;
+    border-radius: 100%;
+}
+
+.top-leftside {
+    flex: 1;
 }
