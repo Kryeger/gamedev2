@@ -50,6 +50,7 @@ Worker.prototype = {
 	levelUp: function(){
 		this.level ++;
 		this.toNextLevel *= 1.3;
+		this.exp = 0;
 	},
 	getJob: function(){
 		this.company.currentProjects.some(function(current, index, arr){
@@ -139,6 +140,11 @@ Company.prototype = {
 			current.popularity -= 5;
 		});
 	},
+	checkIfGamesAreFinished(){
+		this.currentProjects.forEach(function(current, index, arr){
+			current.calcProgress();
+		});
+	},
 	hire: function(worker){
 		this.workers.push(worker);
 		worker.company = this;
@@ -200,8 +206,9 @@ Game.prototype = {
 	},
 	calcProgress:function(){
 		this.progress = 0;
+		var jobCount = this.neededJobs.length;
 		this.jobs.forEach(function(current, index, arr){
-			this.progress += percent(current.progress, current.duration);
+			if(current.finished) this.progress ++;
 		}, this);
 		if(this.progress >= 100) this.publish;
 	},
@@ -255,7 +262,7 @@ var VERSION = "0.0";
 		$(document).on("click", ".ls-mi-icon", function(){
 			if(user.mainCompany.isAnyoneIdle()) user.mainCompany.distribJobs();
 			user.mainCompany.workJobs();
-			console.log(user.mainCompany);
+			console.log(user);
 		});
 //		var worldTick = setInterval(function(){
 //			
