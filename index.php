@@ -32,12 +32,35 @@ include_once("php/func.php");
 
     <body>
         
+        <div class="modalOverlay">
+            <div class="modalCustomCharacter modalWindow">
+                <div class="mcc-top">
+                    <div class="mcc-top-title">Character Customization</div>
+                    <div class="mcc-top-close closeModalOv"><i class="material-icons">close</i></div>
+                </div>
+                <div class="mcc-cont">
+                    <div class="mcc-picture" style="background-image: url(php/face.php);"></div>
+                    <div class="mcc-options">
+                        <div class="mcc-option-cont">
+                            <div class="mcc-option-main">Facial Hair <i class="material-icons">add</i></div>
+                            <div class="mcc-option">
+                                <span>Facial Hair #1</span>
+                                <div class="mcc-option-buy"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="topLevel">
             <div class="top-leftside">
-                <div class="topLogo">gamedev</div>
+                <div class="topLogo">gamedev<span class="version">0.0</span></div>
             </div>
-            <div class="top-rightside">
-                <div class="trs-avt" style="background-image: url(php/face.php?s=4);"></div>
+            <div class="top-rightside clearfix">
+                <div class="trs-money">$<span class="usermoney"></span></div>
+                <div class="trs-name username"></div>
+                <div class="trs-avt useravatar"></div>
             </div>
         </div>
         
