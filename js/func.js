@@ -143,6 +143,10 @@ Company.prototype = {
 	checkIfGamesAreFinished(){
 		this.currentProjects.forEach(function(current, index, arr){
 			current.calcProgress();
+			if(current.progress == current.neededJobs.length){
+				current.publish();
+				arr.splice(index, 1);
+			}
 		});
 	},
 	hire: function(worker){
@@ -206,11 +210,10 @@ Game.prototype = {
 	},
 	calcProgress:function(){
 		this.progress = 0;
-		var jobCount = this.neededJobs.length;
+		
 		this.jobs.forEach(function(current, index, arr){
 			if(current.finished) this.progress ++;
 		}, this);
-		if(this.progress >= 100) this.publish;
 	},
 	publish:function(){
 		console.log("published");
@@ -262,6 +265,8 @@ var VERSION = "0.0";
 		$(document).on("click", ".ls-mi-icon", function(){
 			if(user.mainCompany.isAnyoneIdle()) user.mainCompany.distribJobs();
 			user.mainCompany.workJobs();
+			user.mainCompany.checkIfGamesAreFinished();
+			user.mainCompany.makeSales();
 			console.log(user);
 		});
 //		var worldTick = setInterval(function(){
