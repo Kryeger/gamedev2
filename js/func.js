@@ -56,7 +56,7 @@ Worker.prototype = {
 		this.company.currentProjects.some(function(current, index, arr){
 			var exit = 0;
 			current.jobs.some(function(_current, _index, _arr){
-				if(!_current.finished){
+				if(!_current.finished && _current.contrib.length < _current.workerCapacity){
 					this.currentJob = _current;
 					_current.contrib.push(this);
 					exit = 1;
@@ -82,7 +82,9 @@ function User(fname, lname){
 	this.mainCompany = "";
 }
 
-User.prototype = {
+inheritPrototype(User, Worker);
+
+Object.assign(User.prototype, {
 	constructor: User,
 	createCompany: function(){
 		this.companies.push(new Company("company inc", 1000));
@@ -93,7 +95,7 @@ User.prototype = {
 	selectMainCompany: function(company){
 		this.mainCompany = company;
 	}
-}
+});
 
 function Company(name, capital){
 	this.name = name;
@@ -137,7 +139,8 @@ Company.prototype = {
 		this.releasedGames.forEach(function(current, index, arr){
 			this.capital += (current.popularity * current.price);
 			current.soldCopies += current.popularity;
-			current.popularity -= 5;
+			current.popularity = Math.max(0, current.popularity --);
+			current.sellingTimeLeft --;
 		});
 	},
 	checkIfGamesAreFinished(){
@@ -148,6 +151,21 @@ Company.prototype = {
 				arr.splice(index, 1);
 			}
 		});
+	},
+	retireGames(){
+		this.releasedGames.forEach(function(current, index, arr){
+			if(current.sellingTimeLeft <= 0){
+				this.archive.push(current);
+				arr.splice(index, 1);
+			}
+		}, this);	
+	},
+	tickCycle(){
+		if(this.isAnyoneIdle()) this.distribJobs();
+		this.workJobs();
+		this.checkIfGamesAreFinished();
+		this.makeSales();
+		this.retireGames();
 	},
 	hire: function(worker){
 		this.workers.push(worker);
@@ -167,7 +185,7 @@ function Game(name){
 	
 	this.price = 10;
 	this.soldCopies = 0;
-	this.sellingTimeLeft = 100;
+	this.sellingTimeLeft = 10;
 	this.popularity = 50;
 	
 	this.baseDuration = 10;
@@ -177,19 +195,22 @@ function Game(name){
 			amount: 1,
 			reward: 10,
 			duration: this.baseDuration,
-			progress: 0
+			progress: 0,
+			capacity: 1
 		}, {
 			type: "Art",
 			amount: 1,
 			reward: 10,
 			duration: this.baseDuration,
-			progress: 0
+			progress: 0,
+			capacity: 1
 		}, {
 			type: "Sound",
 			amount: 1,
 			reward: 10,
 			duration: this.baseDuration,
-			progress: 0
+			progress: 0,
+			capacity: 1
 		}
 	];
 	this.jobs = [];
@@ -203,7 +224,7 @@ Game.prototype = {
 	generateJobs: function(){
 		this.neededJobs.forEach(function(current, index, arr){
 			while(current.amount){
-				this.jobs.push(new Job("jobname", current.type, current.duration, current.reward));
+				this.jobs.push(new Job("jobname", current.type, current.duration, current.reward, current.capacity));
 				current.amount --;
 			}
 		}, this);
@@ -221,7 +242,7 @@ Game.prototype = {
 	}
 }
 
-function Job(name, type, duration, reward){
+function Job(name, type, duration, reward, workerCapacity){
 	this.name = name;
 	this.type = type;
 	this.duration = duration;
@@ -229,6 +250,7 @@ function Job(name, type, duration, reward){
 	this.contrib = [];
 	this.reward = reward;
 	this.finished = 0;
+	this.workerCapacity = workerCapacity;
 }
 
 Job.prototype = {
@@ -255,19 +277,19 @@ var VERSION = "0.0";
 //jquery
 
 (function (window, $) {
+	
 	$(document).ready(function(){
 		
 		user.createCompany();
 		user.mainCompany.developNewGame("game1");
 		user.mainCompany.hire(new Worker("coder", 1, 1, 1));
+		user.mainCompany.hire(user);
+		
 		
 		
 		$(document).on("click", ".ls-mi-icon", function(){
-			if(user.mainCompany.isAnyoneIdle()) user.mainCompany.distribJobs();
-			user.mainCompany.workJobs();
-			user.mainCompany.checkIfGamesAreFinished();
-			user.mainCompany.makeSales();
-			console.log(user);
+			user.mainCompany.tickCycle();
+			console.log(user.mainCompany);
 		});
 //		var worldTick = setInterval(function(){
 //			
