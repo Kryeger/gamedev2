@@ -137,11 +137,12 @@ Company.prototype = {
 	},
 	makeSales: function(){
 		this.releasedGames.forEach(function(current, index, arr){
+			console.log(this.capital);
 			this.capital += (current.popularity * current.price);
 			current.soldCopies += current.popularity;
-			current.popularity = Math.max(0, current.popularity --);
+			current.popularity = Math.max(1, current.popularity --);
 			current.sellingTimeLeft --;
-		});
+		}, this);
 	},
 	checkIfGamesAreFinished(){
 		this.currentProjects.forEach(function(current, index, arr){
@@ -291,6 +292,7 @@ var VERSION = "0.0";
 			user.mainCompany.tickCycle();
 			console.log(user.mainCompany);
 		});
+		
 //		var worldTick = setInterval(function(){
 //			
 //			user.mainCompany.distribJobs();
