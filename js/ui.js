@@ -30,6 +30,7 @@
         $(".usermoney").text(numberWithCommas(user.money));
         $(".useravatar").css("background-image", "url("+ getAvt(user) +")");
         $(".version").text(VERSION);
+		$(".ls-mi-title").text(user.mainCompany.name);
 
         // interaction
         $(document).on("click", ".ls-toggler", function(){

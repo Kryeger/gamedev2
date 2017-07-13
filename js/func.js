@@ -16,6 +16,19 @@ function inheritPrototype(childObject, parentObject){
 
 //obj
 
+function World(){
+	this.date = new Date.parse("1.1.1970");
+	this.formatedDate = this.date.toString("dd.MM.yyyy");
+}
+
+World.prototype = {
+	constructor: World,
+	passTime: function(hours){
+		this.date.addHours(8);
+		this.formatedDate = this.date.toString("dd.MM.yyyy");
+	}
+}
+
 function Worker(specialization, skill, salary, hiringFee){
 	this.fname = chance.first();
 	this.lname = chance.last();
@@ -86,8 +99,8 @@ inheritPrototype(User, Worker);
 
 Object.assign(User.prototype, {
 	constructor: User,
-	createCompany: function(){
-		this.companies.push(new Company("company inc", 1000));
+	createCompany: function(name){
+		this.companies.push(new Company(name, 1000));
 		if(this.companies.length == 1){
 			this.mainCompany = _.first(this.companies);
 		}
@@ -273,35 +286,36 @@ Job.prototype = {
 //globals
 
 var user = new User("Kry", "Eger");
+var world = new World();
 var VERSION = "0.0";
 
 //jquery
 
 (function (window, $) {
-	
+	var x = 0;
 	$(document).ready(function(){
 		
-		user.createCompany();
-		user.mainCompany.developNewGame("game1");
+		user.createCompany("Linked Out");
 		user.mainCompany.hire(new Worker("coder", 1, 1, 1));
 		user.mainCompany.hire(user);
-		
-		
 		
 		$(document).on("click", ".ls-mi-icon", function(){
 			user.mainCompany.tickCycle();
 			console.log(user.mainCompany);
 		});
 		
-//		var worldTick = setInterval(function(){
-//			
-//			user.mainCompany.distribJobs();
-//			
-//			user.companies.forEach(function(current, index, arr){
-//				current.workJobs();
-//			});
-//			
-//		}, 250);
+		$(document).on("click", ".mainWrap", function(){
+			user.mainCompany.developNewGame("game" + user.x); x ++;
+		});
+		var worldTick = setInterval(function(){
+			
+			user.mainCompany.tickCycle();
+			world.passTime(24);
+			user.companies.forEach(function(current, index, arr){
+				current.workJobs();
+			});
+			
+		}, 2000);
 		
 	});
 
