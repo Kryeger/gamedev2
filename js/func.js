@@ -1,3 +1,32 @@
+var genreCategory = ["Action", "Adventure", "RPG", "Simulation", "Strategy", "Casual"];
+var genresModel = [
+	{name: "Shooter", category: 0, violence: 10, strategy: 6, complexity: 6, competitiviy: 7, intensity: 8, exploration: 6},
+	{name: "Fighting", category: 0, violence: 10, strategy: 3, complexity: 3, competitiviy: 8, intensity: 10, exploration: 2},
+	{name: "Stealth", category: 0, violence: 8, strategy: 8, complexity: 7, competitiviy: 4, intensity: 10, exploration: 8},
+	{name: "Survival", category: 0, violence: 6, strategy: 6, complexity: 8, competitiviy: 4, intensity: 8, exploration: 10},
+	{name: "Horror", category: 0, violence: 8, strategy: 4, complexity: 6, competitiviy: 2, intensity: 10, exploration: 8},
+	{name: "Platformer", category: 1, violence: 3, strategy: 5, complexity: 5, competitiviy: 5, intensity: 3, exploration: 8},
+	{name: "Visual Novel", category: 1, violence: 5, strategy: 1, complexity: 3, competitiviy: 1, intensity: 5, exploration: 7},
+	{name: "Action-RPG", category: 2, violence: 6, strategy: 6, complexity: 7, competitiviy: 2, intensity: 5, exploration: 8},
+	{name: "Roguelike", category: 2, violence: 3, strategy: 9, complexity: 10, competitiviy: 1, intensity: 5, exploration: 9},
+	{name: "Tactical RPG", category: 2, violence: 3, strategy: 10, complexity: 8, competitiviy: 1, intensity: 6, exploration: 6},
+	{name: "Sandbox", category: 2, violence: 5, strategy: 5, complexity: 7, competitiviy: 1, intensity: 5, exploration: 9}, 
+	{name: "Fantasy", category: 2, violence: 5, strategy: 5, complexity: 7, competitiviy: 1, intensity: 7, exploration: 8},
+	{name: "Sports", category: 3, violence: 3, strategy: 4, complexity: 4, competitiviy: 10, intensity: 7, exploration: 1},
+	{name: "Life", category: 3, violence: 5, strategy: 7, complexity: 8, competitiviy: 1, intensity: 5, exploration: 7},
+	{name: "4X", category: 4, violence: 7, strategy: 10, complexity: 10, competitiviy: 1, intensity: 6, exploration: 10},
+	{name: "Real Time Strategy", category: 4, violence: 3, strategy: 10, complexity: 8, competitiviy: 5, intensity: 8, exploration: 1},
+	{name: "Tower Defense", category: 4, violence: 1, strategy: 8, complexity: 7, competitiviy: 1, intensity: 5, exploration: 1},
+	{name: "Board Game", category: 4, violence: 1, strategy: 6, complexity: 5, competitiviy: 6, intensity: 1, exploration: 1},
+	{name: "Turn Based Strategy", category: 4, violence: 2, strategy: 10, complexity: 4, competitiviy: 4, intensity: 4, exploration: 1}, 
+	{name: "Casual", category: 5, violence: 1, strategy: 1, complexity: 2, competitiviy: 1, intensity: 1, exploration: 3}];
+var subjectsModel = [
+	{name: "Airplane", violence: 1, strategy: 3, complexity: 6, competitiviy: 1, intensity: 2, exploration: 8},
+	{name: "Aliens", violence: 5, strategy: 5, complexity: 5, competitiviy: 5, intensity: 2, exploration: 7},
+];
+
+//{name: "", category: }, 
+
 //methods
 
 function hey(diff = ""){
@@ -19,6 +48,7 @@ function inheritPrototype(childObject, parentObject){
 function World(){
 	this.date = new Date.parse("1.1.1970");
 	this.formatedDate = this.date.toString("dd.MM.yyyy");
+	this.isPaused = 0;
 }
 
 World.prototype = {
@@ -90,7 +120,7 @@ function User(fname, lname){
 	
 	this.avatar = {};
 
-	this.money = 1000;
+	this.money = 1001;
 	this.companies = [];
 	this.mainCompany = "";
 }
@@ -99,10 +129,13 @@ inheritPrototype(User, Worker);
 
 Object.assign(User.prototype, {
 	constructor: User,
-	createCompany: function(name){
-		this.companies.push(new Company(name, 1000));
-		if(this.companies.length == 1){
-			this.mainCompany = _.first(this.companies);
+	createCompany: function(name, capital){
+		if(capital <= this.money){
+			hey();
+			this.companies.push(new Company(name, capital));
+			if(this.companies.length == 1){
+				this.mainCompany = _.first(this.companies);
+			}
 		}
 	},
 	selectMainCompany: function(company){
@@ -117,6 +150,8 @@ function Company(name, capital){
 	this.currentProjects = [];
 	this.releasedGames = [];
 	this.archive = [];
+	this.fans = 0;
+	this.foundingDate = world.formatedDate;
 }
 
 Company.prototype = {
@@ -154,6 +189,7 @@ Company.prototype = {
 			this.capital += (current.popularity * current.price);
 			current.soldCopies += current.popularity;
 			current.popularity = Math.max(1, current.popularity --);
+			this.fans += Math.floor(current.popularity / 5);
 			current.sellingTimeLeft --;
 		}, this);
 	},
@@ -175,11 +211,11 @@ Company.prototype = {
 		}, this);	
 	},
 	tickCycle(){
-		if(this.isAnyoneIdle()) this.distribJobs();
-		this.workJobs();
-		this.checkIfGamesAreFinished();
-		this.makeSales();
-		this.retireGames();
+			if(this.isAnyoneIdle()) this.distribJobs();
+			this.workJobs();
+			this.checkIfGamesAreFinished();
+			this.makeSales();
+			this.retireGames();
 	},
 	hire: function(worker){
 		this.workers.push(worker);
@@ -283,11 +319,35 @@ Job.prototype = {
 	}
 }
 
+function Genre(name, category){
+	this.name = name;
+	this.category = category;
+	this.level = 1;
+}
+
+Genre.prototype = {
+	constructor: Genre,
+	compatibileWith: function(Subject){
+		
+	}
+}
+
+function Subject(name){
+	
+}
+
+Subject.prototype = {
+	constructor: Subject
+}
+
+//genres
+
 //globals
 
 var user = new User("Kry", "Eger");
 var world = new World();
 var VERSION = "0.0";
+var genres = [];
 
 //jquery
 
@@ -295,7 +355,11 @@ var VERSION = "0.0";
 	var x = 0;
 	$(document).ready(function(){
 		
-		user.createCompany("Linked Out");
+		genresModel.forEach(function(current, index, arr){
+			genres.push(new Genre(current.name, current.category));
+		});
+		
+		user.createCompany("Linked Out", 1000);
 		user.mainCompany.hire(new Worker("coder", 1, 1, 1));
 		user.mainCompany.hire(user);
 		
@@ -307,13 +371,17 @@ var VERSION = "0.0";
 		$(document).on("click", ".mainWrap", function(){
 			user.mainCompany.developNewGame("game" + user.x); x ++;
 		});
+		
 		var worldTick = setInterval(function(){
-			
-			user.mainCompany.tickCycle();
-			world.passTime(24);
-			user.companies.forEach(function(current, index, arr){
-				current.workJobs();
-			});
+			if(!world.isPaused){
+				user.mainCompany.tickCycle();
+
+				user.companies.forEach(function(current, index, arr){
+					current.workJobs();
+				});
+									   
+				world.passTime(24);
+			}
 			
 		}, 2000);
 		

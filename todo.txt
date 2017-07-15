@@ -1,4 +1,4 @@
-todos
+roadmap
 
 	0.0
 	
@@ -13,4 +13,11 @@ todos
 		- sequels
 		- dlc
 		- genres
+		- different types of companies (games, consoles, hardware)
 		
+violence
+strategy
+complexity
+competitive
+exploration
+intensity
