@@ -258,7 +258,6 @@ Insufficient funds
 <div class="fc-bs-signature username" style="transform: rotate(`+signAngle+`deg);">`+user.name+`</div>
 <div class="fc-bs-stamp" style="transform: rotate(`+stampAngle+`deg);"></div>
 `);
-                user.money -= companyCap;
                 user.createCompany(companyName, companyCap);
                 world.isPaused = 0;
                 refreshInfo();
