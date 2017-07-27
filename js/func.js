@@ -1,28 +1,36 @@
-var genreCategory = ["Action", "Adventure", "RPG", "Simulation", "Strategy", "Casual"];
-var genresModel = [
-	{name: "Shooter", category: 0, violence: 10, strategy: 6, complexity: 6, competitiviy: 7, intensity: 8, exploration: 6},
-	{name: "Fighting", category: 0, violence: 10, strategy: 3, complexity: 3, competitiviy: 8, intensity: 10, exploration: 2},
-	{name: "Stealth", category: 0, violence: 8, strategy: 8, complexity: 7, competitiviy: 4, intensity: 10, exploration: 8},
-	{name: "Survival", category: 0, violence: 6, strategy: 6, complexity: 8, competitiviy: 4, intensity: 8, exploration: 10},
-	{name: "Horror", category: 0, violence: 8, strategy: 4, complexity: 6, competitiviy: 2, intensity: 10, exploration: 8},
-	{name: "Platformer", category: 1, violence: 3, strategy: 5, complexity: 5, competitiviy: 5, intensity: 3, exploration: 8},
-	{name: "Visual Novel", category: 1, violence: 5, strategy: 1, complexity: 3, competitiviy: 1, intensity: 5, exploration: 7},
-	{name: "Action-RPG", category: 2, violence: 6, strategy: 6, complexity: 7, competitiviy: 2, intensity: 5, exploration: 8},
-	{name: "Roguelike", category: 2, violence: 3, strategy: 9, complexity: 10, competitiviy: 1, intensity: 5, exploration: 9},
-	{name: "Tactical RPG", category: 2, violence: 3, strategy: 10, complexity: 8, competitiviy: 1, intensity: 6, exploration: 6},
-	{name: "Sandbox", category: 2, violence: 5, strategy: 5, complexity: 7, competitiviy: 1, intensity: 5, exploration: 9}, 
-	{name: "Fantasy", category: 2, violence: 5, strategy: 5, complexity: 7, competitiviy: 1, intensity: 7, exploration: 8},
-	{name: "Sports", category: 3, violence: 3, strategy: 4, complexity: 4, competitiviy: 10, intensity: 7, exploration: 1},
-	{name: "Life", category: 3, violence: 5, strategy: 7, complexity: 8, competitiviy: 1, intensity: 5, exploration: 7},
-	{name: "4X", category: 4, violence: 7, strategy: 10, complexity: 10, competitiviy: 1, intensity: 6, exploration: 10},
-	{name: "Real Time Strategy", category: 4, violence: 3, strategy: 10, complexity: 8, competitiviy: 5, intensity: 8, exploration: 1},
-	{name: "Tower Defense", category: 4, violence: 1, strategy: 8, complexity: 7, competitiviy: 1, intensity: 5, exploration: 1},
-	{name: "Board Game", category: 4, violence: 1, strategy: 6, complexity: 5, competitiviy: 6, intensity: 1, exploration: 1},
-	{name: "Turn Based Strategy", category: 4, violence: 2, strategy: 10, complexity: 4, competitiviy: 4, intensity: 4, exploration: 1}, 
-	{name: "Casual", category: 5, violence: 1, strategy: 1, complexity: 2, competitiviy: 1, intensity: 1, exploration: 3}];
-var subjectsModel = [
-	{name: "Airplane", violence: 1, strategy: 3, complexity: 6, competitiviy: 1, intensity: 2, exploration: 8},
-	{name: "Aliens", violence: 5, strategy: 5, complexity: 5, competitiviy: 5, intensity: 2, exploration: 7},
+var genres = ["Action","Shooter","Adventure","RPG","Simulation","Strategy","Casual","Fighting","Platformer","Puzzle","Boardgame"];
+
+var subjects = ["Airplane", "Aliens", "Business", "City", "Comedy", "Detective", "Dungeon", "Fantasy", "Fashion", "Hacking", "History", "Horror" , "Hunting", "Life", "Martial Arts", "Military", "Medical", "Music", "Mystery", "Ninja", "Post Apocalyptic", "Prison", "Racing", "Romance", "Sci-Fi", "Space", "Sports", "Superheroes"];
+
+var subjectToGenreCompat = [
+	[5,7,7,6,10,2,3,1,1,1,2],
+	[7,8,6,7,1,6,1,5,3,1,1], 
+	[1,1,1,6,10,10,2,1,1,3,8], 
+	[1,1,5,7,10,10,7,3,1,6,6], 
+	[4,1,3,2,1,1,10,2,7,6,3], 
+	[7,8,10,4,1,8,1,6,1,10,2], 
+	[5,3,8,10,1,7,2,3,3,4,9], 
+	[6,3,8,10,1,5,7,3,7,5,2], 
+	[1,1,3,8,1,8,10,1,4,1,1], 
+	[6,3,2,8,4,8,4,1,1,10,6], 
+	[7,10,10,8,2,10,3,1,1,1,5], 
+	[8,10,10,6,1,1,1,1,8,6,1], 
+	[5,10,8,4,8,1,8,3,1,2,1], 
+	[6,1,7,8,10,7,8,1,1,5,7], 
+	[7,1,9,10,1,6,1,3,6,7,8], 
+	[8,10,6,7,10,8,1,1,2,1,4], 
+	[1,1,1,4,10,2,8,1,1,9,1], 
+	[1,1,7,2,8,3,10,1,6,8,1], 
+	[6,8,8,6,1,2,6,1,8,10,2], 
+	[10,3,5,5,1,4,5,10,8,6,1], 
+	[8,8,10,10,6,6,2,1,6,3,1], 
+	[8,10,7,5,10,8,1,7,1,6,1], 
+	[8,1,8,3,10,1,8,1,5,1,1], 
+	[1,1,6,6,1,2,10,1,4,8,1], 
+	[7,8,8,7,3,7,4,2,4,5,1], 
+	[7,6,9,8,10,8,3,1,2,1,1],
+	[6,1,1,1,10,8,8,6,1,1,1],
+	[7,6,8,5,2,4,3,8,5,3,3]
 ];
 
 //{name: "", category: }, 
@@ -120,7 +128,7 @@ function User(fname, lname){
 	
 	this.avatar = {};
 
-	this.money = 1001;
+	this.money = 10000;
 	this.companies = [];
 	this.mainCompany = "";
 }
@@ -130,9 +138,12 @@ inheritPrototype(User, Worker);
 Object.assign(User.prototype, {
 	constructor: User,
 	createCompany: function(name, capital){
+		console.log(capital, this.money);
 		if(capital <= this.money){
 			hey();
 			this.companies.push(new Company(name, capital));
+			this.money -= capital;
+			console.log(this.companies);
 			if(this.companies.length == 1){
 				this.mainCompany = _.first(this.companies);
 			}
@@ -185,9 +196,9 @@ Company.prototype = {
 	},
 	makeSales: function(){
 		this.releasedGames.forEach(function(current, index, arr){
-			console.log(this.capital);
-			this.capital += (current.popularity * current.price);
-			current.soldCopies += current.popularity;
+			var nextSales = (current.popularity * current.fans * current.genreRating);
+			this.capital += (nextSales * current.price);
+			current.soldCopies += nextSales;
 			current.popularity = Math.max(1, current.popularity --);
 			this.fans += Math.floor(current.popularity / 5);
 			current.sellingTimeLeft --;
@@ -230,13 +241,18 @@ Company.prototype = {
 	}
 }
 
-function Game(name){
+function Game(name, genre, subject){
 	this.name = name;
 	
 	this.price = 10;
 	this.soldCopies = 0;
 	this.sellingTimeLeft = 10;
 	this.popularity = 50;
+	
+	this.subject = subject;
+	this.genre = genre;
+	
+	this.genreRating = subjectToGenreCompat[subjects.indexOf(this.subject)][genres.indexOf(this.genre)];
 	
 	this.baseDuration = 10;
 	this.neededJobs = [
@@ -347,7 +363,6 @@ Subject.prototype = {
 var user = new User("Kry", "Eger");
 var world = new World();
 var VERSION = "0.0";
-var genres = [];
 
 //jquery
 
@@ -355,21 +370,17 @@ var genres = [];
 	var x = 0;
 	$(document).ready(function(){
 		
-		genresModel.forEach(function(current, index, arr){
-			genres.push(new Genre(current.name, current.category));
-		});
-		
 		user.createCompany("Linked Out", 1000);
 		user.mainCompany.hire(new Worker("coder", 1, 1, 1));
 		user.mainCompany.hire(user);
 		
 		$(document).on("click", ".ls-mi-icon", function(){
 			user.mainCompany.tickCycle();
-			console.log(user.mainCompany);
+			console.log(user);
 		});
 		
 		$(document).on("click", ".mainWrap", function(){
-			user.mainCompany.developNewGame("game" + user.x); x ++;
+			user.mainCompany.developNewGame("game" + user.x, "Shooter", "Military"); x ++;
 		});
 		
 		var worldTick = setInterval(function(){
