@@ -110,8 +110,8 @@ include_once("php/func.php");
                 <div class="trs-companyWrap">
                     <div class="trs-companyAvt" style="background-image: url(http://i.imgur.com/Tz8ZXAe.png);"></div>
                     <div class="trs-mainComp noSelect">
-                    <div class="trs-companyName textScrollWrap">
-                        <div class="mainCompanyName"></div>
+                        <div class="trs-companyName textScrollWrap scrollingTextParent">
+                            <div class="mainCompanyName scrollingText"></div>
                     </div>
                         <i class="material-icons trs-toggleCompaniesList">arrow_drop_down</i>
                     </div>
@@ -134,30 +134,6 @@ include_once("php/func.php");
                         <i class="material-icons">face</i>
                         <span class="mainCompanyFansNum"></span>
                     </div>
-                    
-                    <!-- 
-                    <div class="trs-allComps">
-                        <div class="trs-allCompsTop"> Your companies </div>
-                        <div class="trs-allCompsList">
-                            <div class="trs-allCompsItem">
-                                <div class="trs-aci-avt" style="background-image: url(http://i.imgur.com/Tz8ZXAe.png);"></div>
-                                <div class="trs-aci-info">
-                                    <div class="trs-aci-name textScrollWrap"><div class="mainCompanyName"></div>
-                                    </div>
-                                    <div class="trs-aci-details clearfix">
-                                        <div class="trs-aci-detail mainCompanyCapital">Capital: $999</div>
-                                        <div class="trs-aci-detail mainCompanyWorkersNum">Workers: 10</div>
-                                        <div class="trs-aci-detail mainCompanyReleasedGamesNum">Released Games: 2</div>
-                                        <div class="trs-aci-detail mainCompanyFansNum">Fans: 2</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trs-addNewComp">
-                            <div class="trs-addNewCompButton">Found New Company</div>
-                        </div>
-                    </div>
-                    -->
                 </div>
                 <div class="trs-money">$<span class="usermoney"></span></div>
                 <div class="trs-name username"></div>
@@ -174,7 +150,67 @@ include_once("php/func.php");
             <div class="mainContent">
 
                 <div class="mainWrap">
-                    asd
+                    
+                    <div class="companyPageWrap">
+                        
+                        <div class="cp-top">
+                            <div class="cp-avt-name-date">
+                                <div class="cp-avt" style="background-image: url(http://i.imgur.com/Tz8ZXAe.png);"></div>
+                                <div class="cp-name-date">
+                                    <div class="cp-name mainCompanyName"></div>
+                                    <div class="cp-foundingDate">Since <span class="mainCompanyFoundingDate"></span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="cp-detailsWrap clearfix">
+                                <div class="cp-detail cpd-capital">
+                                    <div class="cp-detail-icon-wrap">
+                                        <div class="cp-detail-icon-back"></div>
+                                        <i class="material-icons cp-detail-icon-i">account_balance</i>
+                                    </div>
+                                    <div class="cp-detail-texts">
+                                        <div class="cp-detail-texts-top">$<span class="mainCompanyCapital"></span></div>
+                                        <div class="cp-detail-texts-bottom">Capital</div>
+                                    </div>
+                                </div>
+
+                                <div class="cp-detail cpd-workers">
+                                    <div class="cp-detail-icon-wrap">
+                                        <div class="cp-detail-icon-back"></div>
+                                        <i class="material-icons cp-detail-icon-i">people</i>
+                                    </div>
+                                    <div class="cp-detail-texts">
+                                        <div class="cp-detail-texts-top"><span class="mainCompanyWorkersNum"></span></div>
+                                        <div class="cp-detail-texts-bottom">Workers</div>
+                                    </div>
+                                </div>
+
+                                <div class="cp-detail cpd-games">
+                                    <div class="cp-detail-icon-wrap">
+                                        <div class="cp-detail-icon-back"></div>
+                                        <i class="material-icons cp-detail-icon-i">burst_mode</i>
+                                    </div>
+                                    <div class="cp-detail-texts">
+                                        <div class="cp-detail-texts-top"><span class="mainCompanyReleasedGamesNum"></span></div>
+                                        <div class="cp-detail-texts-bottom">Released Games</div>
+                                    </div>
+                                </div>
+
+                                <div class="cp-detail cpd-fans">
+                                    <div class="cp-detail-icon-wrap">
+                                        <div class="cp-detail-icon-back"></div>
+                                        <i class="material-icons cp-detail-icon-i">face</i>
+                                    </div>
+                                    <div class="cp-detail-texts">
+                                        <div class="cp-detail-texts-top"><span class="mainCompanyFansNum"></span></div>
+                                        <div class="cp-detail-texts-bottom">Fans</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
                 </div>
 
             </div>

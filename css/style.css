@@ -146,6 +146,7 @@ body {
     -webkit-box-flex: 1;
     -ms-flex: 1;
     flex: 1;
+    overflow: auto;
 }
 
 .topLevel {
@@ -242,6 +243,9 @@ body {
 }
 .ls-mi-icon i{
     font-size: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 
 .ls-mi-title {
@@ -540,7 +544,7 @@ body {
     font-weight: 500;
 }
 
-.textScrollWrap {
+.scrollingTextParent {
     position: relative;
     overflow: hidden;
     display: -webkit-box;
@@ -550,7 +554,7 @@ body {
     -ms-flex-align: center;
     align-items: center;
 }
-.textScrollWrap div{
+.textScrollWrap .scrollingText{
     display: inline-block;
     position: relative;
     white-space: nowrap;
@@ -558,10 +562,10 @@ body {
     left: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-transition: all 0.1s;
-    transition: all 0.1s;
+    -webkit-transition: all 0.1s linear;
+    transition: all 0.1s linear;
 }
-.textScrollWrap:hover div{
+.textScrollWrap:hover .scrollingText{
     overflow: visible;
 }
 
@@ -629,12 +633,22 @@ body {
     background-color: #f9f9f9;
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex;
+    cursor: pointer;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
     -webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
     box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+.trs-allCompsItem.selected{
+    -webkit-box-shadow: inset 0 0 0 2px #0081ff;
+    box-shadow: inset 0 0 0 2px #0081ff;
+}
+
+.trs-allCompsItem:not(.selected):hover{
+    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .trs-aci-avt {
@@ -732,7 +746,7 @@ body {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     z-index: 9;
-    width: 200px;
+    width: 250px;
     background-color: #f9f9f9;
     color: #111;
 }
@@ -1088,4 +1102,115 @@ body {
 .fc-bottom-sign-button-cancel:hover{
     color: #f9f9f9;
     background-color: #111;
+}
+
+.cp-name {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.cp-foundingDate {
+    font-size: 10px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.cp-avt-name-date {
+    display: flex;
+    align-items: center;
+}
+
+.cp-avt {
+    min-width: 50px;
+    height: 50px;
+    background-size: cover;
+    background-position: center;
+    margin-right: 10px;
+}
+
+.cp-detail-icon-wrap {
+    position: relative;
+}
+
+.cp-detail-icon-back {
+    position: relative;
+    height: 50px;
+    width: 50px;
+    transform: skewX(-20deg);
+}
+.cp-detail.cpd-capital .cp-detail-icon-back{
+    box-shadow: inset 0 -110px 100px -95px #54ea66;
+}
+.cp-detail.cpd-workers .cp-detail-icon-back{
+    box-shadow: inset 0 -110px 100px -95px #fb4f4f;
+}
+.cp-detail.cpd-games .cp-detail-icon-back{
+    box-shadow: inset 0 -110px 100px -95px #0081ff;
+}
+.cp-detail.cpd-fans .cp-detail-icon-back{
+    box-shadow: inset 0 -110px 100px -95px #f9c00c;
+}
+
+.cp-detail-icon-i {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+    border-radius: 100%;
+    box-shadow: inset 40px -40px 50px -50px rgba(249,249,249, 1), inset 0 0 0 1px rgba(249,249,249, 0.4);
+}
+
+.cp-detail {
+    display: inline-flex;
+    align-items: center;
+    float: left;
+    margin-right: 20px;
+}
+
+.cp-detail-texts-top {
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.cp-detail-texts-bottom {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.cp-detail.cpd-capital .cp-detail-texts-bottom{
+    color: #54ea66;
+}
+.cp-detail.cpd-workers .cp-detail-texts-bottom{
+    color: #fb4f4f;
+}
+.cp-detail.cpd-games .cp-detail-texts-bottom{
+    color: #0081ff;
+}
+.cp-detail.cpd-fans .cp-detail-texts-bottom{
+    color: #f9c00c;
+}
+
+.cp-detailsWrap {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.cp-top {
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.cp-detail-texts {
+    position: relative;
+    z-index: 2;
 }

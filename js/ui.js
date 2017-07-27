@@ -25,6 +25,7 @@
         $(".version").text(VERSION);
         $(".ls-mi-title").text(user.mainCompany.name);
         $(".mainCompanyName").text(user.mainCompany.name);
+        $(".mainCompanyFoundingDate").text(user.mainCompany.foundingDate);
         $(".mainCompanyCapital").text(numberWithCommas(user.mainCompany.capital));
         $(".mainCompanyWorkersNum").text(numberWithCommas(Object.keys(user.mainCompany.workers).length));
         $(".mainCompanyReleasedGamesNum").text(numberWithCommas(Object.keys(user.mainCompany.releasedGames).length + Object.keys(user.mainCompany.archive).length));
@@ -58,22 +59,25 @@
         
         var textScroll;
         
-        $(".textScrollWrap").hover(function(){
-            var move = 5;
-            var parent = $(this);
-            if(parent.outerWidth() <= parseInt($(this).find("div").width())){
-                console.log(parent.outerWidth());
-            textScroll = setInterval(function(){
-                var spanLeft = parseInt(parent.find("div").css("left"));
-                parent.find("div").css("left", (spanLeft - move) +"px");
-                if(-spanLeft >= parseInt(parent.find("div").width()) - parseInt(parent.width())) move = -5;
-                else if(-spanLeft <= 0) move = 5;
-            }, 100);
+        //$(".textScrollWrap").hover(function(){
+        $(document).on({
+            mouseenter: function(){
+                var move = 5;
+                var parent = $(this).find(".scrollingText").parents(".scrollingTextParent");
+                if(parent.outerWidth() <= parseInt($(this).find(".scrollingText").width())){
+                    textScroll = setInterval(function(){
+                        var spanLeft = parseInt(parent.find(".scrollingText").css("left"));
+                        parent.find(".scrollingText").css("left", (spanLeft - move) +"px");
+                        if(-spanLeft >= parseInt(parent.find(".scrollingText").width()) - parseInt(parent.width())) move = -5;
+                        else if(-spanLeft <= 0) move = 5;
+                    }, 100);
+                }
+            },
+            mouseleave: function(){
+                clearInterval(textScroll);
+                $(this).find(".scrollingText").css("left", "0px");
             }
-        }, function(){
-            clearInterval(textScroll);
-            $(this).find("div").css("left", "0px");
-        });
+        }, ".textScrollWrap");
         
         $(document).on("click", ".trs-mainComp", function(){
             if(!$('.trs-allComps').length){
@@ -93,11 +97,13 @@
                 if(Object.keys(user.companies).length > 0){
                     var compNum = Object.keys(user.companies).length;
                     for(var i = 0; i < compNum; i++){
+                        var isMain = 'trs-allCompsItem';
+                        if(user.companies[i].name == user.mainCompany.name) isMain += ' selected';
                         $(".trs-allCompsList").append(`
-<div class="trs-allCompsItem">
+<div class="`+isMain+` textScrollWrap" data-companyid="`+i+`">
 <div class="trs-aci-avt" style="background-image: url(http://i.imgur.com/Tz8ZXAe.png);"></div>
 <div class="trs-aci-info">
-<div class="trs-aci-name textScrollWrap"><div>`+user.companies[i].name+`</div>
+<div class="trs-aci-name scrollingTextParent"><div class="scrollingText">`+user.companies[i].name+`</div>
 </div>
 <div class="trs-aci-details clearfix">
 <div class="trs-aci-detail">Capital: $`+(numberWithCommas(user.companies[i].capital))+`</div>
@@ -110,6 +116,16 @@
 `); 
                     }
                 }
+            }
+        });
+        
+        $(document).on("click", ".trs-allCompsItem", function(){
+           var compId = parseInt($(this).attr("data-companyid")); 
+            if(compId >= 0 && compId < Object.keys(user.companies).length){
+                user.selectMainCompany(user.companies[compId]);
+                $(".trs-allCompsItem").removeClass("selected");
+                $(this).addClass("selected");
+                refreshInfo();
             }
         });
         
@@ -247,6 +263,13 @@ Insufficient funds
                 var top = $("input[name=compName]").offset().top - 68;
                 $(".founding-contract").prepend(`<div class="fc-marking" style="top: `+top+`px;"></div>`);
                 $(".fc-cont").after(`<div class="fc-warn">You must enter a name for the Company</div>`);
+            }
+            
+            if(user.companies.find(function(el){return el.name == companyName;})){
+                canDo = 0;
+                var top = $("input[name=compName]").offset().top - 68;
+                $(".founding-contract").prepend(`<div class="fc-marking" style="top: `+top+`px;"></div>`);
+                $(".fc-cont").after(`<div class="fc-warn">There already is a Company of this name!</div>`);
             }
             
             if(canDo){
